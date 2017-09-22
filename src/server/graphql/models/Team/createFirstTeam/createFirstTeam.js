@@ -68,8 +68,6 @@ export default {
     await createTeamAndLeader(userId, validNewTeam, true);
     // set up the team while the user is on step 3
     setTimeout(async () => {
-      // Asynchronously create seed projects for team leader:
-      addSeedProjects(userId, teamId);
       // TODO: remove me after more
       const notification = {
         id: expiresSoonId,
@@ -79,15 +77,19 @@ export default {
         userIds: [userId],
         trialExpiresAt: periodEnd
       };
-      await r.table('Notification').insert(notification);
+      // Asynchronously create seed projects for team leader:
+      await r({
+        notification: r.table('Notification').insert(notification),
+        seeds: addSeedProjects(userId, teamId)
+      });
       const notificationsAdded = {notifications: [notification]};
       // this probably doesn't do anything since they haven't subscribed yet, but a nice safety measure
       getPubSub().publish(`${NOTIFICATIONS_ADDED}.${userId}`, {notificationsAdded});
+      sendSegmentEvent('Welcome Step2 Completed', userId, {teamId: newTeam.id});
       if (unitTestCb) {
         unitTestCb();
       }
-    }, 0);
-    sendSegmentEvent('Welcome Step2 Completed', userId, {teamId: newTeam.id});
+    });
     return tmsSignToken(authToken, tms);
   }
 };
