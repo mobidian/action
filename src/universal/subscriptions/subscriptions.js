@@ -2,7 +2,6 @@ import {
   AGENDA,
   AGENDA_PROJECTS,
   ARCHIVED_PROJECTS,
-  INVITATIONS,
   ORG_APPROVALS,
   ORGANIZATIONS,
   OWNED_ORGANIZATIONS,
@@ -65,18 +64,6 @@ export default [
         isComplete
         sortOrder
         teamMemberId
-      }
-    }`
-  },
-  {
-    channel: INVITATIONS,
-    string: `
-    subscription($teamId: ID!) {
-      invitations(teamId: $teamId) {
-        id
-        email
-        tokenExpiration
-        updatedAt
       }
     }`
   },

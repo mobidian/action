@@ -1,5 +1,4 @@
 import {GraphQLBoolean, GraphQLList, GraphQLNonNull, GraphQLString} from 'graphql';
-import {Invitee} from 'server/graphql/models/Invitation/invitationSchema';
 import addOrgValidation from 'server/graphql/models/Organization/addOrg/addOrgValidation';
 import createNewOrg from 'server/graphql/models/Organization/addOrg/createNewOrg';
 import {TeamInput} from 'server/graphql/models/Team/teamSchema';
@@ -8,6 +7,7 @@ import {ensureUniqueId, getUserId, requireWebsocket} from 'server/utils/authoriz
 import sendSegmentEvent from 'server/utils/sendSegmentEvent';
 import {handleSchemaErrors} from 'server/utils/utils';
 import createTeamAndLeader from '../../Team/createFirstTeam/createTeamAndLeader';
+import Invitee from 'server/graphql/types/Invitee';
 
 export default {
   type: GraphQLBoolean,
