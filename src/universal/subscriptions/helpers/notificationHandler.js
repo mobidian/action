@@ -33,7 +33,7 @@ export const addNotificationUpdater = (store, viewerId, newNode) => {
       newNode,
       'NotificationEdge'
     );
-    newEdge.setValue(newNode.startAt, 'cursor');
+    newEdge.setValue(newNode.getValue('startAt'), 'cursor');
     ConnectionHandler.insertEdgeBefore(conn, newEdge);
   }
 };
@@ -46,8 +46,9 @@ const notificationHandler = {
     // localId isn't always present because if i accept to join i want the authToken but no notification
     const {id: localId} = fromGlobalId(id);
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Congratulations!',
-      message: `You've been added to team ${teamName}`,
+      message: `You’ve been added to team ${teamName}`,
       action: {
         label: 'Great!',
         callback: () => {
@@ -65,6 +66,7 @@ const notificationHandler = {
     const {viewerId} = environment;
     const inviteeEmail = payload.getValue('inviteeEmail');
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Oh no!',
       message: `${inviteeEmail} was denied to join the team.`,
       action: {
@@ -81,7 +83,7 @@ const notificationHandler = {
     const requestorId = payload.getValue('requestorId');
     dispatch(showInfo({
       title: `${requestorName} wants to facilitate`,
-      message: 'Click \'Promote\' to hand over the reigns',
+      message: 'Click ‘Promote’ to hand over the reigns',
       autoDismiss: 0,
       action: {
         label: 'Promote',
@@ -98,6 +100,7 @@ const notificationHandler = {
     const {viewerId} = environment;
     const inviteeEmail = payload.getValue('inviteeEmail');
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Approved!',
       message: `${inviteeEmail} has been approved by your organization. We just sent them an invitation.`,
       action: {
@@ -115,6 +118,7 @@ const notificationHandler = {
     const preferredName = payload.getValue('preferredName');
     const teamName = payload.getValue('teamName');
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Ahoy, a new crewmate!',
       message: `${preferredName} just joined team ${teamName}`
     }));
@@ -126,6 +130,7 @@ const notificationHandler = {
     const isKickout = payload.getValue('isKickout');
     if (isKickout) {
       dispatch(showWarning({
+        autoDismiss: 10,
         title: 'So long!',
         message: `You have been removed from ${teamName}`,
         action: {
@@ -151,6 +156,7 @@ const notificationHandler = {
     const {viewerId} = environment;
     const orgId = payload.getValue('orgId');
     dispatch(showWarning({
+      autoDismiss: 10,
       title: 'Oh no!',
       message: 'Your credit card was rejected.',
       action: {
@@ -167,12 +173,13 @@ const notificationHandler = {
     const orgId = payload.getValue('orgId');
     const groupName = payload.getValue('groupName');
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Congratulations!',
-      message: `You've been promoted to billing leader for ${groupName}`,
+      message: `You’ve been promoted to billing leader for ${groupName}`,
       action: {
         label: 'Check it out!',
         callback: () => {
-          history.push(`/me/organizations/${orgId}`);
+          history.push(`/me/organizations/${orgId}/members`);
         }
       }
     }));
@@ -182,7 +189,8 @@ const notificationHandler = {
     const preferredName = payload.getValue('preferredName');
     const teamName = payload.getValue('teamName');
     dispatch(showInfo({
-      title: 'They\'re back!',
+      autoDismiss: 10,
+      title: 'They’re back!',
       message: `${preferredName} has rejoined ${teamName}`
     }));
   },
@@ -193,6 +201,7 @@ const notificationHandler = {
     // const globalId = payload.getValue('id');
     // const {id: dbId} = fromGlobalId(globalId);
     dispatch(showInfo({
+      autoDismiss: 10,
       title: 'Approval Requested!',
       message: `${inviterName} would like to invite someone to their team`,
       action: {
@@ -208,7 +217,8 @@ const notificationHandler = {
     const {viewerId} = environment;
     const teamName = payload.getValue('teamName');
     dispatch(showInfo({
-      title: 'That\'s it, folks!',
+      autoDismiss: 10,
+      title: 'That’s it, folks!',
       message: `${teamName} has been archived.`,
       action: {
         label: 'OK',
@@ -226,7 +236,8 @@ const notificationHandler = {
     const inviterName = payload.getValue('inviterName');
     const teamName = payload.getValue('teamName');
     dispatch(showInfo({
-      title: 'You\'re invited!',
+      autoDismiss: 10,
+      title: 'You’re invited!',
       message: `${inviterName} would like you to join their team ${teamName}`,
       action: {
         label: 'Accept!',

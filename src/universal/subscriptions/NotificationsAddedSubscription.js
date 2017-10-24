@@ -48,9 +48,6 @@ const subscription = graphql`
         ... on NotifyTeamArchived {
           teamName
         }
-        ... on NotifyTrial {
-          trialExpiresAt
-        }
       }
     }
   }
@@ -58,8 +55,8 @@ const subscription = graphql`
 
 
 const NotificationsAddedSubscription = (environment, queryVariables, {dispatch, history, location}) => {
-  const {ensureSubscription, viewerId} = environment;
-  return ensureSubscription({
+  const {viewerId} = environment;
+  return {
     subscription,
     updater: (store) => {
       const options = {dispatch, environment, history, location, store, viewerId};
@@ -72,7 +69,7 @@ const NotificationsAddedSubscription = (environment, queryVariables, {dispatch, 
         }
       });
     }
-  });
+  };
 };
 
 export default NotificationsAddedSubscription;
