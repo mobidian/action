@@ -25,24 +25,14 @@ const makeSeedProjects = () => {
       status: FUTURE,
       sortOrder: 1,
       content: convertToProjectContent(`
-      ${today} - Use this column to plan ahead. Adjust dates & prioritization (solo or as a team) any time. #private
+      ${today} - Use this column to plan ahead. #private
       `)
-    },
-    {
-      status: FUTURE,
-      sortOrder: 0,
-      content: convertToProjectContent(`
-      ${in2weeks} - Quarterly retrospective scheduled. In addtion to daily/weekly prioritization, it's important to mark
-      milestones and reflect on past process. Try scheduling monthly or quarterly Action Meetings for the sole purpose of
-      looking back and planning ahead. Email us for ideas, or to be introduced to a local consultant from our network.`)
     },
     {
       status: STUCK,
       sortOrder: 0,
       content: convertToProjectContent(`
-      ${today} - #private Use this column whenever a task can't be completed. The most common causes of bottlenecks are:
-      you need more information, you need help from a teammate, 
-      or there is an active task you or a teammate need to finish first`)
+      ${today} - Use this column if a task is Stuck.`)
     },
     {
       status: ACTIVE,
