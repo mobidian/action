@@ -6,7 +6,7 @@ const TaskEditorPayload = new GraphQLObjectType({
   fields: () => ({
     taskId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: '(Relay) The taskId of the card being edited'
+      description: 'The taskId of the card being edited'
     },
     editing: {
       type: new GraphQLNonNull(GraphQLBoolean),

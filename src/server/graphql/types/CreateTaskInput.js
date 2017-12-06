@@ -6,16 +6,16 @@ const CreateTaskInput = new GraphQLInputObjectType({
   fields: () => ({
     agendaId: {
       type: GraphQLID,
-      description: '(DB) foreign key for AgendaItem'
+      description: 'foreign key for AgendaItem'
     },
     content: {type: GraphQLString},
     teamId: {
       type: GraphQLID,
-      description: '(DB) teamId, the team the task is on'
+      description: 'teamId, the team the task is on'
     },
     userId: {
       type: GraphQLID,
-      description: '(DB) userId, the owner of the task'
+      description: 'userId, the owner of the task'
     },
     sortOrder: {type: GraphQLFloat},
     status: {type: TaskStatusEnum}

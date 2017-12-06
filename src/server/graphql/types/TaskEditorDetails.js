@@ -5,7 +5,7 @@ const TaskEditorDetails = new GraphQLObjectType({
   fields: () => ({
     userId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: '(Relay) The userId of the person editing the task'
+      description: 'The userId of the person editing the task'
     },
     preferredName: {
       type: new GraphQLNonNull(GraphQLString),
