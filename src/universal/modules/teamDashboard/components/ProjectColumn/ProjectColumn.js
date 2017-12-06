@@ -113,20 +113,26 @@ class ProjectColumn extends Component {
     return null;
   };
 
-  sortOrderBetween = (targetProject, boundingProject, newProjectId, before) => {
+  sortOrderBetween = (targetProject, boundingProject, draggedProjectId, before) => {
     if (targetProject == null) {
       throw new Error('targetProject cannot be null');
     }
     if (boundingProject == null) {
-      return targetProject.sortOrder + ((SORT_STEP + dndNoise()) * (before ? -1 : 1));
+      return targetProject.sortOrder + ((SORT_STEP + dndNoise()) * (before ? 1 : -1));
     } else {
-      return boundingProject.id === newProjectId
+      return boundingProject.id === draggedProjectId
         ? boundingProject.sortOrder
         : (boundingProject.sortOrder + targetProject.sortOrder) / 2 + dndNoise();
     }
   };
 
-  insertProject = (newProjectId, targetProjectId, before) => {
+  /**
+   * `draggedProjectId` - project id of the project being dragged-and-dropped
+   * `targetProjectId` - the project id of the project being "dropped on"
+   * `before` - whether the dragged project is being inserted before (true) or
+   * after (false) the target project.
+   */
+  insertProject = (draggedProjectId, targetProjectId, before) => {
     const areaOpLookup = {
       [MEETING]: 'meetingUpdatesContainer',
       [USER_DASH]: 'userColumnsContainer',
@@ -137,15 +143,18 @@ class ProjectColumn extends Component {
     const targetIndex = projects.findIndex((p) => p.id === targetProjectId);
 
     const targetProject = projects[targetIndex];
+    // `boundingProject` is the project which sandwiches the dragged project on
+    // the opposite side of the target project.  When the target project is in
+    // the front or back of the list, this will be `undefined`.
     const boundingProject = projects[targetIndex + (before ? -1 : 1)];
 
-    const sortOrder = this.sortOrderBetween(targetProject, boundingProject, newProjectId, before);
+    const sortOrder = this.sortOrderBetween(targetProject, boundingProject, draggedProjectId, before);
     console.log('targetProject, boundingProject, computed:', targetProject.sortOrder, boundingProject && boundingProject.sortOrder, sortOrder);
 
     const {status} = targetProject;
     const gqlArgs = {
       area,
-      updatedProject: {id: newProjectId, status, sortOrder}
+      updatedProject: {id: draggedProjectId, status, sortOrder}
     };
     const op = areaOpLookup[area];
     const cashayArgs = {
@@ -223,7 +232,7 @@ class ProjectColumn extends Component {
                 project={project}
                 dragState={dragState}
                 myUserId={userId}
-                insert={(projectId, before) => this.insertProject(projectId, project.id, before)}
+                insert={(draggedProjectId, before) => this.insertProject(draggedProjectId, project.id, before)}
                 ref={(c) => {
                   if (c) {
                     dragState.components.push(c);

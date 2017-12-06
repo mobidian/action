@@ -95,10 +95,10 @@ const projectDragCollect = (connectSource, monitor) => ({
 const handleProjectDrop = (props, monitor, component) => {
   const {project, insert} = props;
   const dropTargetProjectId = project.id;
-  const draggedProjectID = monitor.getItem().id;
+  const draggedProjectId = monitor.getItem().id;
 
   // Don't drag-and-drop on ourselves
-  if (draggedProjectID === dropTargetProjectId) {
+  if (draggedProjectId === dropTargetProjectId) {
     return;
   }
 
@@ -109,7 +109,7 @@ const handleProjectDrop = (props, monitor, component) => {
   const before = mouseY < dropTargetMidpoint;
 
   // Re-insert this project in the list
-  insert(draggedProjectID, before);
+  insert(draggedProjectId, before);
 };
 
 const projectDropCollect = (connect) => ({
