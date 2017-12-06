@@ -11,9 +11,9 @@ import AgendaItemAddedSubscription from 'universal/subscriptions/AgendaItemAdded
 import AgendaItemRemovedSubscription from 'universal/subscriptions/AgendaItemRemovedSubscription';
 import AgendaItemUpdatedSubscription from 'universal/subscriptions/AgendaItemUpdatedSubscription';
 import MeetingUpdatedSubscription from 'universal/subscriptions/MeetingUpdatedSubscription';
-import ProjectCreatedSubscription from 'universal/subscriptions/ProjectCreatedSubscription';
-import ProjectDeletedSubscription from 'universal/subscriptions/ProjectDeletedSubscription';
-import ProjectUpdatedSubscription from 'universal/subscriptions/ProjectUpdatedSubscription';
+import TaskCreatedSubscription from 'universal/subscriptions/TaskCreatedSubscription';
+import TaskDeletedSubscription from 'universal/subscriptions/TaskDeletedSubscription';
+import TaskUpdatedSubscription from 'universal/subscriptions/TaskUpdatedSubscription';
 import TeamMemberAddedSubscription from 'universal/subscriptions/TeamMemberAddedSubscription';
 import TeamMemberUpdatedSubscription from 'universal/subscriptions/TeamMemberUpdatedSubscription';
 import NewAuthTokenSubscription from 'universal/subscriptions/NewAuthTokenSubscription';
@@ -33,9 +33,9 @@ const subscriptions = [
   AgendaItemUpdatedSubscription,
   AgendaItemRemovedSubscription,
   MeetingUpdatedSubscription,
-  ProjectUpdatedSubscription,
-  ProjectCreatedSubscription,
-  ProjectDeletedSubscription,
+  TaskUpdatedSubscription,
+  TaskCreatedSubscription,
+  TaskDeletedSubscription,
   TeamMemberAddedSubscription,
   TeamMemberUpdatedSubscription,
   NewAuthTokenSubscription,

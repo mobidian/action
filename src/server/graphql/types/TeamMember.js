@@ -1,11 +1,11 @@
 import {GraphQLBoolean, GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString} from 'graphql';
 import {forwardConnectionArgs} from 'graphql-relay';
 import getRethink from 'server/database/rethinkDriver';
-import connectionFromProjects from 'server/graphql/queries/helpers/connectionFromProjects';
+import connectionFromTasks from 'server/graphql/queries/helpers/connectionFromTasks';
 import GraphQLEmailType from 'server/graphql/types/GraphQLEmailType';
 import GraphQLISO8601Type from 'server/graphql/types/GraphQLISO8601Type';
 import GraphQLURLType from 'server/graphql/types/GraphQLURLType';
-import {ProjectConnection} from 'server/graphql/types/Project';
+import {TaskConnection} from 'server/graphql/types/Task';
 import Team from 'server/graphql/types/Team';
 import User from 'server/graphql/types/User';
 
@@ -76,9 +76,9 @@ const TeamMember = new GraphQLObjectType({
         return getDataLoader().users.load(userId);
       }
     },
-    projects: {
-      type: ProjectConnection,
-      description: 'Projects owned by the team member',
+    tasks: {
+      type: TaskConnection,
+      description: 'Tasks owned by the team member',
       args: {
         ...forwardConnectionArgs,
         after: {
@@ -91,10 +91,10 @@ const TeamMember = new GraphQLObjectType({
         // }
       },
       resolve: async ({teamId, userId}, args, {getDataLoader}) => {
-        const allProjects = await getDataLoader().projectsByTeamId.load(teamId);
-        const projectsForUserId = allProjects.filter((project) => project.userId === userId);
-        const publicProjectsForUserId = projectsForUserId.filter((project) => !project.tags.includes('private'));
-        return connectionFromProjects(publicProjectsForUserId);
+        const allTasks = await getDataLoader().tasksByTeamId.load(teamId);
+        const tasksForUserId = allTasks.filter((task) => task.userId === userId);
+        const publicTasksForUserId = tasksForUserId.filter((task) => !task.tags.includes('private'));
+        return connectionFromTasks(publicTasksForUserId);
       }
     }
   })

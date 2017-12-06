@@ -14,7 +14,7 @@ import {
   KICKED_OUT,
   MENTIONEE,
   PAYMENT_REJECTED,
-  PROJECT_INVOLVES,
+  TASK_INVOLVES,
   PROMOTE_TO_BILLING_LEADER,
   REJOIN_TEAM,
   REQUEST_NEW_USER,
@@ -192,7 +192,7 @@ const notificationHandler = {
     }));
     addNotificationUpdater(store, viewerId, payload);
   },
-  [PROJECT_INVOLVES]: (payload, {dispatch, history, environment, store}) => {
+  [TASK_INVOLVES]: (payload, {dispatch, history, environment, store}) => {
     const inMeeting = Boolean(matchPath(location.pathname, {
       path: '/meeting',
       exact: false,
@@ -205,7 +205,7 @@ const notificationHandler = {
     const involvement = payload.getValue('involvement');
     const changeAuthorName = payload.getLinkedRecord('changeAuthor').getValue('preferredName');
     const wording = involvement === MENTIONEE ? 'mentioned you in' : 'assigned you to';
-    const message = `${changeAuthorName} ${wording} a project`;
+    const message = `${changeAuthorName} ${wording} a task`;
     dispatch(showInfo({
       autoDismiss: 10,
       title: 'Fresh work!',

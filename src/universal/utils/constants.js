@@ -49,7 +49,7 @@ export const columnArray = [FUTURE, STUCK, ACTIVE, DONE];
 export const meetingColumnArray = [DONE, ACTIVE, STUCK, FUTURE];
 
 /* Drag-n-Drop Items */
-export const PROJECT = 'project';
+export const TASK = 'task';
 export const AGENDA_ITEM = 'agendaItem';
 
 /* Sorting */
@@ -94,8 +94,8 @@ export const REQUEST_NEW_USER = 'REQUEST_NEW_USER';
 export const TEAM_INVITE = 'TEAM_INVITE';
 // sent to members of team that was archived
 export const TEAM_ARCHIVED = 'TEAM_ARCHIVED';
-// sent to members when a project is assigned to them or mentions them
-export const PROJECT_INVOLVES = 'PROJECT_INVOLVES';
+// sent to members when a task is assigned to them or mentions them
+export const TASK_INVOLVES = 'TASK_INVOLVES';
 
 export const notificationTypes = [
   PAYMENT_REJECTED,
@@ -139,13 +139,13 @@ export const PAID = 'PAID';
 export const FAILED = 'FAILED';
 
 /* character limits */
-export const PROJECT_MAX_CHARS = 51200;
+export const TASK_MAX_CHARS = 51200;
 
 /* Action Tags */
 export const tags = [
   {
     name: 'private',
-    description: 'Only you will be able to see this project'
+    description: 'Only you will be able to see this task'
   },
   {
     name: 'archived',
@@ -188,9 +188,9 @@ export const NOTIFICATIONS_ADDED = 'notificationsAdded';
 export const NOTIFICATIONS_CLEARED = 'notificationsCleared';
 export const ORGANIZATION_ADDED = 'organizationAdded';
 export const ORGANIZATION_UPDATED = 'organizationUpdated';
-export const PROJECT_UPDATED = 'projectUpdated';
-export const PROJECT_CREATED = 'projectCreated';
-export const PROJECT_DELETED = 'projectDeleted';
+export const TASK_UPDATED = 'taskUpdated';
+export const TASK_CREATED = 'taskCreated';
+export const TASK_DELETED = 'taskDeleted';
 export const TEAM_MEMBERS_INVITED = 'teamMembersInvited';
 export const TEAM_MEMBER_ADDED = 'teamMemberAdded';
 export const TEAM_MEMBER_REMOVED = 'teamMemberRemoved';
@@ -210,6 +210,6 @@ export const PERSONAL = 'personal';
 export const PRO = 'pro';
 export const ENTERPRISE = 'enterprise';
 
-/* Project Involvement Types */
+/* Task Involvement Types */
 export const ASSIGNEE = 'ASSIGNEE';
 export const MENTIONEE = 'MENTIONEE';

@@ -10,11 +10,11 @@ import LoadingView from 'universal/components/LoadingView/LoadingView';
 import QueryRenderer from 'universal/components/QueryRenderer/QueryRenderer';
 import withAtmosphere from 'universal/decorators/withAtmosphere/withAtmosphere';
 import UserDashMain from 'universal/modules/userDashboard/components/UserDashMain/UserDashMain';
-import ProjectCreatedSubscription from 'universal/subscriptions/ProjectCreatedSubscription';
-import ProjectDeletedSubscription from 'universal/subscriptions/ProjectDeletedSubscription';
-import ProjectUpdatedSubscription from 'universal/subscriptions/ProjectUpdatedSubscription';
+import TaskCreatedSubscription from 'universal/subscriptions/TaskCreatedSubscription';
+import TaskDeletedSubscription from 'universal/subscriptions/TaskDeletedSubscription';
+import TaskUpdatedSubscription from 'universal/subscriptions/TaskUpdatedSubscription';
 
-// short ttl for projects to avoid sending duplicates when switching from team to user dash
+// short ttl for tasks to avoid sending duplicates when switching from team to user dash
 const cacheConfig = {ttl: ms('10s')};
 
 const query = graphql`
@@ -26,9 +26,9 @@ const query = graphql`
 `;
 
 const subscriptions = [
-  ProjectUpdatedSubscription,
-  ProjectCreatedSubscription,
-  ProjectDeletedSubscription
+  TaskUpdatedSubscription,
+  TaskCreatedSubscription,
+  TaskDeletedSubscription
 ];
 
 const UserDashRoot = ({atmosphere}) => {

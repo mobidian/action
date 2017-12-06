@@ -3,7 +3,7 @@ import React from 'react';
 import {createFragmentContainer} from 'react-relay';
 import withAtmosphere from 'universal/decorators/withAtmosphere/withAtmosphere';
 import {MenuItem} from 'universal/modules/menu';
-import UpdateProjectMutation from 'universal/mutations/UpdateProjectMutation';
+import UpdateTaskMutation from 'universal/mutations/UpdateTaskMutation';
 import fromTeamMemberId from 'universal/utils/relay/fromTeamMemberId';
 
 const OutcomeCardAssignMenu = (props) => {
@@ -11,19 +11,19 @@ const OutcomeCardAssignMenu = (props) => {
     atmosphere,
     area,
     closePortal,
-    project: {projectId, teamMember: {ownerId}, team: {teamMembers}}
+    task: {taskId, teamMember: {ownerId}, team: {teamMembers}}
   } = props;
 
-  const handleProjectUpdate = (newOwner) => {
+  const handleTaskUpdate = (newOwner) => {
     if (newOwner === ownerId) {
       return;
     }
     const {userId} = fromTeamMemberId(newOwner);
-    const updatedProject = {
-      id: projectId,
+    const updatedTask = {
+      id: taskId,
       userId
     };
-    UpdateProjectMutation(atmosphere, updatedProject, area);
+    UpdateTaskMutation(atmosphere, updatedTask, area);
   };
 
   const itemFactory = () => {
@@ -36,7 +36,7 @@ const OutcomeCardAssignMenu = (props) => {
             avatar={teamMember.picture}
             isActive={ownerId === teamMember.id}
             label={teamMember.preferredName}
-            onClick={() => handleProjectUpdate(teamMember.id)}
+            onClick={() => handleTaskUpdate(teamMember.id)}
             closePortal={closePortal}
           />
         );
@@ -54,14 +54,14 @@ OutcomeCardAssignMenu.propTypes = {
   area: PropTypes.string.isRequired,
   atmosphere: PropTypes.object.isRequired,
   closePortal: PropTypes.func.isRequired,
-  project: PropTypes.object.isRequired
+  task: PropTypes.object.isRequired
 };
 
 export default createFragmentContainer(
   withAtmosphere(OutcomeCardAssignMenu),
   graphql`
-    fragment OutcomeCardAssignMenu_project on Project {
-      projectId: id
+    fragment OutcomeCardAssignMenu_task on Task {
+      taskId: id
       team {
         teamMembers(sortBy: "preferredName") {
           id

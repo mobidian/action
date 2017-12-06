@@ -29,7 +29,7 @@ const NotifyInvitation = new GraphQLObjectType({
     },
     team: {
       type: Team,
-      description: 'The team the project is on',
+      description: 'The team the task is on',
       resolve: ({teamId}, args, {getDataLoader}) => {
         return getDataLoader().teams.load(teamId);
       }

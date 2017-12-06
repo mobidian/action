@@ -11,7 +11,7 @@ import mutation from './rootMutation';
 import query from './rootQuery';
 import subscription from './rootSubscription';
 import NotifyKickedOut from 'server/graphql/types/NotifyKickedOut';
-import NotifyProjectInvolves from 'server/graphql/types/NotifyProjectInvolves';
+import NotifyTaskInvolves from 'server/graphql/types/NotifyTaskInvolves';
 import NotifyFacilitatorDisconnected from 'server/graphql/types/NotifyFacilitatorDisconnected';
 
 export default new GraphQLSchema({
@@ -26,7 +26,7 @@ export default new GraphQLSchema({
     NotifyKickedOut,
     NotifyNewTeamMember,
     NotifyPayment,
-    NotifyProjectInvolves,
+    NotifyTaskInvolves,
     NotifyPromotion,
     NotifyTeamArchived
   ]

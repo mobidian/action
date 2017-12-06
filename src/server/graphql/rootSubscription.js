@@ -23,9 +23,9 @@ import teamMembersInvited from 'server/graphql/subscriptions/teamMembersInvited'
 import newAuthToken from 'server/graphql/subscriptions/newAuthToken';
 import organizationAdded from 'server/graphql/subscriptions/organizationAdded';
 import organizationUpdated from 'server/graphql/subscriptions/organizationUpdated';
-import projectUpdated from 'server/graphql/subscriptions/projectUpdated';
-import projectCreated from 'server/graphql/subscriptions/projectCreated';
-import projectDeleted from 'server/graphql/subscriptions/projectDeleted';
+import taskUpdated from 'server/graphql/subscriptions/taskUpdated';
+import taskCreated from 'server/graphql/subscriptions/taskCreated';
+import taskDeleted from 'server/graphql/subscriptions/taskDeleted';
 import meetingUpdated from 'server/graphql/subscriptions/meetingUpdated';
 import teamMemberUpdated from 'server/graphql/subscriptions/teamMemberUpdated';
 import teamMemberAdded from 'server/graphql/subscriptions/teamMemberAdded';
@@ -61,9 +61,9 @@ export default new GraphQLObjectType({
     notificationsCleared,
     organizationAdded,
     organizationUpdated,
-    projectCreated,
-    projectDeleted,
-    projectUpdated,
+    taskCreated,
+    taskDeleted,
+    taskUpdated,
     slackChannelAdded,
     slackChannelRemoved,
     providerAdded,

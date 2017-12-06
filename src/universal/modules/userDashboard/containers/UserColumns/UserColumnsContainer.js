@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createFragmentContainer} from 'react-relay';
-import ProjectColumns from 'universal/components/ProjectColumns/ProjectColumns';
+import TaskColumns from 'universal/components/TaskColumns/TaskColumns';
 import {USER_DASH} from 'universal/utils/constants';
 
 const mapStateToProps = (state) => {
@@ -17,21 +17,21 @@ class UserColumnsContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {teamFilterId: oldFilter, viewer: {projects: oldProjects}} = this.props;
-    const {teamFilterId, viewer: {projects}} = nextProps;
-    if (oldFilter !== teamFilterId || oldProjects !== projects) {
+    const {teamFilterId: oldFilter, viewer: {tasks: oldTasks}} = this.props;
+    const {teamFilterId, viewer: {tasks}} = nextProps;
+    if (oldFilter !== teamFilterId || oldTasks !== tasks) {
       this.filterByTeamMember(nextProps);
     }
   }
 
   filterByTeamMember(props) {
-    const {teamFilterId, viewer: {projects}} = props;
+    const {teamFilterId, viewer: {tasks}} = props;
     const edges = teamFilterId ?
-      projects.edges.filter(({node}) => node.team.id === teamFilterId) :
-      projects.edges;
+      tasks.edges.filter(({node}) => node.team.id === teamFilterId) :
+      tasks.edges;
     this.setState({
-      projects: {
-        ...projects,
+      tasks: {
+        ...tasks,
         edges
       }
     });
@@ -39,10 +39,10 @@ class UserColumnsContainer extends Component {
 
   render() {
     const {teams, userId} = this.props;
-    const {projects} = this.state;
+    const {tasks} = this.state;
     return (
-      <ProjectColumns
-        projects={projects}
+      <TaskColumns
+        tasks={tasks}
         area={USER_DASH}
         teams={teams}
         userId={userId}
@@ -52,7 +52,7 @@ class UserColumnsContainer extends Component {
 }
 
 UserColumnsContainer.propTypes = {
-  projects: PropTypes.object,
+  tasks: PropTypes.object,
   teams: PropTypes.array,
   teamFilterId: PropTypes.string,
   userId: PropTypes.string,
@@ -64,7 +64,7 @@ export default createFragmentContainer(
   connect(mapStateToProps)(UserColumnsContainer),
   graphql`
     fragment UserColumnsContainer_viewer on User {
-      projects(first: 1000) @connection(key: "UserColumnsContainer_projects") {
+      tasks(first: 1000) @connection(key: "UserColumnsContainer_tasks") {
         edges {
           node {
             # grab these so we can sort correctly
@@ -74,7 +74,7 @@ export default createFragmentContainer(
             team {
               id
             }
-            ...DraggableProject_project
+            ...DraggableTask_task
           }
         }
       }

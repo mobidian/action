@@ -7,7 +7,7 @@ import MeetingMain from 'universal/modules/meeting/components/MeetingMain/Meetin
 import MeetingSection from 'universal/modules/meeting/components/MeetingSection/MeetingSection';
 import MeetingFacilitationHint from 'universal/modules/meeting/components/MeetingFacilitationHint/MeetingFacilitationHint';
 import {MEETING} from 'universal/utils/constants';
-import ProjectColumns from 'universal/components/ProjectColumns/ProjectColumns';
+import TaskColumns from 'universal/components/TaskColumns/TaskColumns';
 import actionMeeting from 'universal/modules/meeting/helpers/actionMeeting';
 import {createFragmentContainer} from 'react-relay';
 
@@ -15,23 +15,23 @@ class MeetingUpdates extends Component {
   state = {};
 
   componentWillMount() {
-    this.filterProjects(this.props);
+    this.filterTasks(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {viewer: {projects: oldProjects}, localPhaseItem: oldLocalPhaseItem} = this.props;
-    const {viewer: {projects}, localPhaseItem} = nextProps;
-    if (projects !== oldProjects || localPhaseItem !== oldLocalPhaseItem) {
-      this.filterProjects(nextProps);
+    const {viewer: {tasks: oldTasks}, localPhaseItem: oldLocalPhaseItem} = this.props;
+    const {viewer: {tasks}, localPhaseItem} = nextProps;
+    if (tasks !== oldTasks || localPhaseItem !== oldLocalPhaseItem) {
+      this.filterTasks(nextProps);
     }
   }
 
-  filterProjects(props) {
-    const {members, localPhaseItem, viewer: {projects}} = props;
+  filterTasks(props) {
+    const {members, localPhaseItem, viewer: {tasks}} = props;
     const currentTeamMember = members[localPhaseItem - 1];
-    const edges = projects.edges.filter(({node}) => node.teamMember.id === currentTeamMember.id);
+    const edges = tasks.edges.filter(({node}) => node.teamMember.id === currentTeamMember.id);
     this.setState({
-      projects: {edges}
+      tasks: {edges}
     });
   }
 
@@ -44,7 +44,7 @@ class MeetingUpdates extends Component {
       showMoveMeetingControls,
       styles
     } = this.props;
-    const {projects} = this.state;
+    const {tasks} = this.state;
     const self = members.find((m) => m.isSelf);
     const currentTeamMember = members[localPhaseItem - 1];
     const isLastMember = localPhaseItem === members.length;
@@ -75,11 +75,11 @@ class MeetingUpdates extends Component {
             }
           </div>
           <div className={css(styles.body)}>
-            <ProjectColumns
+            <TaskColumns
               alignColumns="center"
               isMyMeetingSection={isMyMeetingSection}
               myTeamMemberId={myTeamMemberId}
-              projects={projects}
+              tasks={tasks}
               area={MEETING}
             />
           </div>
@@ -120,7 +120,7 @@ export default createFragmentContainer(
   withStyles(styleThunk)(MeetingUpdates),
   graphql`
     fragment MeetingUpdates_viewer on User {
-      projects(first: 1000, teamId: $teamId) @connection(key: "TeamColumnsContainer_projects") {
+      tasks(first: 1000, teamId: $teamId) @connection(key: "TeamColumnsContainer_tasks") {
         edges {
           node {
             # grab these so we can sort correctly
@@ -130,7 +130,7 @@ export default createFragmentContainer(
             teamMember {
               id
             }
-            ...DraggableProject_project
+            ...DraggableTask_task
           }
         }
       }

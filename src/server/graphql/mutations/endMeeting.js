@@ -3,12 +3,12 @@ import getRethink from 'server/database/rethinkDriver';
 import getEndMeetingSortOrders from 'server/graphql/mutations/helpers/endMeeting/getEndMeetingSortOrders';
 import {endSlackMeeting} from 'server/graphql/mutations/helpers/notifySlack';
 import UpdateMeetingPayload from 'server/graphql/types/UpdateMeetingPayload';
-import archiveProjectsForDB from 'server/safeMutations/archiveProjectsForDB';
+import archiveTasksForDB from 'server/safeMutations/archiveTasksForDB';
 import {requireSUOrTeamMember} from 'server/utils/authorization';
 import getPubSub from 'server/utils/getPubSub';
 import sendSegmentEvent from 'server/utils/sendSegmentEvent';
 import {errorObj} from 'server/utils/utils';
-import {DONE, LOBBY, MEETING_UPDATED, PROJECT_UPDATED, SUMMARY} from 'universal/utils/constants';
+import {DONE, LOBBY, MEETING_UPDATED, TASK_UPDATED, SUMMARY} from 'universal/utils/constants';
 import {makeSuccessExpression, makeSuccessStatement} from 'universal/utils/makeSuccessCopy';
 
 export default {
@@ -48,14 +48,14 @@ export default {
       .map((doc) => doc('id'))
       .coerceTo('array')
       .do((agendaItemIds) => {
-        return r.table('Project')
+        return r.table('Task')
           .getAll(r.args(agendaItemIds), {index: 'agendaId'})
           .map((row) => row.merge({id: r.expr(meetingId).add('::').add(row('id'))}))
           .orderBy('createdAt')
           .pluck('id', 'content', 'status', 'tags', 'teamMemberId')
           .coerceTo('array')
           .default([])
-          .do((projects) => {
+          .do((tasks) => {
             return r.table('Meeting').get(meetingId)
               .update({
                 agendaItemsCompleted: agendaItemIds.count().default(0),
@@ -74,21 +74,21 @@ export default {
                     preferredName: teamMember('preferredName'),
                     present: teamMember('isCheckedIn').not().not()
                       .default(false),
-                    projects: projects.filter({teamMemberId: teamMember('id')})
+                    tasks: tasks.filter({teamMemberId: teamMember('id')})
                   })),
-                projects
+                tasks
               }, {
                 nonAtomic: true,
                 returnChanges: true
-              })('changes')(0)('new_val').pluck('invitees', 'meetingNumber', 'projects');
+              })('changes')(0)('new_val').pluck('invitees', 'meetingNumber', 'tasks');
           });
       });
-    const updatedProjects = await getEndMeetingSortOrders(completedMeeting);
-    const {projectsToArchive} = await r({
-      updatedSortOrders: r(updatedProjects)
-        .forEach((project) => {
-          return r.table('Project').get(project('id')).update({
-            sortOrder: project('sortOrder')
+    const updatedTasks = await getEndMeetingSortOrders(completedMeeting);
+    const {tasksToArchive} = await r({
+      updatedSortOrders: r(updatedTasks)
+        .forEach((task) => {
+          return r.table('Task').get(task('id')).update({
+            sortOrder: task('sortOrder')
           });
         }),
       // send to summary view
@@ -117,20 +117,20 @@ export default {
               isCheckedIn: null
             });
         })),
-      projectsToArchive: r.table('Project').getAll(teamId, {index: 'teamId'})
+      tasksToArchive: r.table('Task').getAll(teamId, {index: 'teamId'})
         .filter({status: DONE})
-        .filter((project) => project('tags').contains('archived').not())
+        .filter((task) => task('tags').contains('archived').not())
         .pluck('id', 'content', 'tags')
         .coerceTo('array')
     });
 
-    if (projectsToArchive.length) {
-      const archivedProjects = await archiveProjectsForDB(projectsToArchive);
-      archivedProjects.forEach((project) => {
-        const projectUpdated = {project};
+    if (tasksToArchive.length) {
+      const archivedTasks = await archiveTasksForDB(tasksToArchive);
+      archivedTasks.forEach((task) => {
+        const taskUpdated = {task};
         // since this is from the meeting, we don't need to remove it from the user dash
         // because we are guaranteed they have a sub going for the team dash
-        getPubSub().publish(`${PROJECT_UPDATED}.${teamId}`, projectUpdated);
+        getPubSub().publish(`${TASK_UPDATED}.${teamId}`, taskUpdated);
       });
     }
     const {meetingNumber} = completedMeeting;

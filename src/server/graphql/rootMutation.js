@@ -17,9 +17,9 @@ import approveToOrg from 'server/graphql/mutations/approveToOrg';
 import cancelTeamInvite from 'server/graphql/mutations/cancelTeamInvite';
 import clearNotification from 'server/graphql/mutations/clearNotification';
 import createGitHubIssue from 'server/graphql/mutations/createGitHubIssue';
-import createProject from 'server/graphql/mutations/createProject';
-import deleteProject from 'server/graphql/mutations/deleteProject';
-import editProject from 'server/graphql/mutations/editProject';
+import createTask from 'server/graphql/mutations/createTask';
+import deleteTask from 'server/graphql/mutations/deleteTask';
+import editTask from 'server/graphql/mutations/editTask';
 import endMeeting from 'server/graphql/mutations/endMeeting';
 import githubAddAssignee from 'server/graphql/mutations/githubAddAssignee';
 import githubAddMember from 'server/graphql/mutations/githubAddMember';
@@ -51,7 +51,7 @@ import toggleAgendaList from 'server/graphql/mutations/toggleAgendaList';
 import updateAgendaItem from 'server/graphql/mutations/updateAgendaItem';
 import updateCreditCard from 'server/graphql/mutations/updateCreditCard';
 import updateOrg from 'server/graphql/mutations/updateOrg';
-import updateProject from 'server/graphql/mutations/updateProject';
+import updateTask from 'server/graphql/mutations/updateTask';
 import updateCheckInQuestion from 'server/graphql/mutations/updateTeamCheckInQuestion';
 import upgradeToPro from 'server/graphql/mutations/upgradeToPro';
 
@@ -80,9 +80,9 @@ export default new GraphQLObjectType({
     cancelTeamInvite,
     clearNotification,
     createGitHubIssue,
-    createProject,
-    deleteProject,
-    editProject,
+    createTask,
+    deleteTask,
+    editTask,
     endMeeting,
     githubAddAssignee,
     githubAddMember,
@@ -115,7 +115,7 @@ export default new GraphQLObjectType({
     updateCreditCard,
     updateOrg,
     updateCheckInQuestion,
-    updateProject,
+    updateTask,
     upgradeToPro
   })
 });

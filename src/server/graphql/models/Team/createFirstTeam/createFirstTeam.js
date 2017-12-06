@@ -7,7 +7,7 @@ import tmsSignToken from 'server/utils/tmsSignToken';
 import {handleSchemaErrors} from 'server/utils/utils';
 import shortid from 'shortid';
 import resolvePromiseObj from 'universal/utils/resolvePromiseObj';
-import addSeedProjects from './addSeedProjects';
+import addSeedTasks from './addSeedTasks';
 import createFirstTeamValidation from './createFirstTeamValidation';
 import createTeamAndLeader from './createTeamAndLeader';
 import TeamInput from 'server/graphql/types/TeamInput';
@@ -57,7 +57,7 @@ export default {
     await resolvePromiseObj({
       newOrg: createNewOrg(orgId, orgName, userId),
       newTeamUpdatedUser: createTeamAndLeader(userId, validNewTeam, true),
-      seedTeam: addSeedProjects(userId, teamId)
+      seedTeam: addSeedTasks(userId, teamId)
     });
     sendSegmentEvent('Welcome Step2 Completed', userId, {teamId: newTeam.id});
     return tmsSignToken(authToken, tms);

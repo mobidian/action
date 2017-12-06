@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createFragmentContainer} from 'react-relay';
-import ProjectColumns from 'universal/components/ProjectColumns/ProjectColumns';
+import TaskColumns from 'universal/components/TaskColumns/TaskColumns';
 import {TEAM_DASH} from 'universal/utils/constants';
 
 const mapStateToProps = (state, props) => {
@@ -22,18 +22,18 @@ class TeamColumnsContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {teamMemberFilterId: oldFilter, viewer: {projects: oldProjects}} = this.props;
-    const {teamMemberFilterId, viewer: {projects}} = nextProps;
-    if (oldFilter !== teamMemberFilterId || oldProjects !== projects) {
+    const {teamMemberFilterId: oldFilter, viewer: {tasks: oldTasks}} = this.props;
+    const {teamMemberFilterId, viewer: {tasks}} = nextProps;
+    if (oldFilter !== teamMemberFilterId || oldTasks !== tasks) {
       this.filterByTeamMember(nextProps);
     }
   }
 
   filterByTeamMember(props) {
-    const {teamMemberFilterId, viewer: {projects, team: {teamMembers}}} = props;
+    const {teamMemberFilterId, viewer: {tasks, team: {teamMembers}}} = props;
     const edges = teamMemberFilterId ?
-      projects.edges.filter(({node}) => node.teamMember.id === teamMemberFilterId) :
-      projects.edges;
+      tasks.edges.filter(({node}) => node.teamMember.id === teamMemberFilterId) :
+      tasks.edges;
     const edgesWithTeamMembers = edges.map((edge) => {
       return {
         ...edge,
@@ -44,8 +44,8 @@ class TeamColumnsContainer extends Component {
       };
     });
     this.setState({
-      projects: {
-        ...projects,
+      tasks: {
+        ...tasks,
         edges: edgesWithTeamMembers
       }
     });
@@ -53,11 +53,11 @@ class TeamColumnsContainer extends Component {
 
   render() {
     const {myTeamMemberId, teamMemberFilterId} = this.props;
-    const {projects} = this.state;
+    const {tasks} = this.state;
     return (
-      <ProjectColumns
+      <TaskColumns
         myTeamMemberId={myTeamMemberId}
-        projects={projects}
+        tasks={tasks}
         teamMemberFilterId={teamMemberFilterId}
         area={TEAM_DASH}
       />
@@ -83,7 +83,7 @@ export default createFragmentContainer(
           preferredName
         }
       }
-      projects(first: 1000, teamId: $teamId) @connection(key: "TeamColumnsContainer_projects") {
+      tasks(first: 1000, teamId: $teamId) @connection(key: "TeamColumnsContainer_tasks") {
         edges {
           node {
             # grab these so we can sort correctly
@@ -93,7 +93,7 @@ export default createFragmentContainer(
             teamMember {
               id
             }
-            ...DraggableProject_project
+            ...DraggableTask_task
           }
         }
       }

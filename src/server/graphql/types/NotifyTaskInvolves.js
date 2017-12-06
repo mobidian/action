@@ -1,0 +1,54 @@
+import {GraphQLID, GraphQLNonNull, GraphQLObjectType} from 'graphql';
+import Team from 'server/graphql/types/Team';
+import Notification, {notificationInterfaceFields} from 'server/graphql/types/Notification';
+import Task from 'server/graphql/types/Task';
+import TaskInvolvementType from 'server/graphql/types/TaskInvolvementType';
+import TeamMember from 'server/graphql/types/TeamMember';
+
+const NotifyTaskInvolves = new GraphQLObjectType({
+  name: 'NotifyTaskInvolves',
+  description: 'A notification sent to someone who was just added to a team',
+  interfaces: () => [Notification],
+  fields: () => ({
+    ...notificationInterfaceFields,
+    involvement: {
+      type: TaskInvolvementType,
+      description: 'How the user is affiliated with the task'
+    },
+    taskId: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: '(DB) The taskId that now involves the userId'
+    },
+    task: {
+      type: Task,
+      description: 'The task that now involves the userId',
+      resolve: ({taskId}, args, {getDataLoader}) => {
+        return getDataLoader().tasks.load(taskId);
+      }
+    },
+    changeAuthorId: {
+      type: GraphQLID,
+      description: '(DB) The teamMemberId of the person that made the change'
+    },
+    changeAuthor: {
+      type: TeamMember,
+      description: 'The TeamMember of the person that made the change',
+      resolve: ({changeAuthorId}, args, {getDataLoader}) => {
+        return getDataLoader().teamMembers.load(changeAuthorId);
+      }
+    },
+    teamId: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: '(DB) The teamId the user is joining'
+    },
+    team: {
+      type: Team,
+      description: 'The team the task is on',
+      resolve: ({teamId}, args, {getDataLoader}) => {
+        return getDataLoader().teams.load(teamId);
+      }
+    }
+  })
+});
+
+export default NotifyTaskInvolves;
